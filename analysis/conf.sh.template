@@ -1,0 +1,27 @@
+#/bin/bash
+
+# Postgres specific variables:
+PGPORT=""
+PGDATAFOLDER="$HOME/feedback-kde/experiments"
+PGINSTFOLDER="$HOME/feedback-kde/pgsql"
+PGDATABASE="experiments"
+
+#Location of Python2.7 interpreter
+PYTHON="python"
+
+if [ -z "$PGDATAFOLDER" ]; then
+  echo 'Please provide a $PGDATAFOLDER in conf.sh.'
+  exit
+fi
+
+# Set default values.
+if [ -z "$PGPORT" ]; then
+  PGPORT="5432"
+fi
+if [ -z "$PGDATABASE" ]; then
+  PGDATABASE=`whoami`
+fi
+
+PSQL="$PGINSTFOLDER/bin/psql"
+POSTGRES="$PGINSTFOLDER/bin/postgres"
+
