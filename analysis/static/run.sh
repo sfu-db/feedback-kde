@@ -5,18 +5,20 @@ source $DIR/../conf.sh
 cd $DIR
 
 # Some general parameters.
-REPETITIONS=10
+# REPETITIONS=10
+REPETITIONS=1
 TRAINQUERIES=100
 TESTQUERIES=300
 MODELSIZE=1024
 LOGFILE=$DIR/../evaluation/quality/result.csv
-DATASETS=(bike forest genhist_set1 power protein)
+# DATASETS=(bike forest genhist_set1 power protein)
+DATASETS=(forest)
 
 #echo >> $LOGFILE
 
 for dataset in "${DATASETS[@]}"; do
     echo "Running experiments for $dataset:"
-    for query in $DIR/datasets/$dataset/queries/*; do
+    for query in $DIR/datasets/$dataset/queries/*.sql; do
         [ -f "${query}" ] || continue
         query_file=`basename $query`
         echo "  Running for query file $query_file:"
@@ -29,12 +31,12 @@ for dataset in "${DATASETS[@]}"; do
            TS=$SECONDS
 
            # Pick a new experiment and run batch:
-           echo "      KDE (batch):"
-           $PYTHON $DIR/runExperiment.py                                 \
-              --dbname=$PGDATABASE --port=$PGPORT                       \
-              --queryfile=$query --log=$LOGFILE                         \
-              --model=kde_batch --modelsize=$MODELSIZE                  \
-              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES
+           # echo "      KDE (batch):"
+           # $PYTHON $DIR/runExperiment.py                                 \
+           #    --dbname=$PGDATABASE --port=$PGPORT                       \
+           #    --queryfile=$query --log=$LOGFILE                         \
+           #    --model=kde_batch --modelsize=$MODELSIZE                  \
+           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES
 
            # Run KDE heuristic: 
            echo "      KDE (heuristic):"
@@ -43,34 +45,34 @@ for dataset in "${DATASETS[@]}"; do
               --queryfile=$query --log=$LOGFILE                         \
               --model=kde_heuristic --modelsize=$MODELSIZE              \
               --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
-              --replay_experiment
+              # --replay_experiment
             
            # Run KDE optimal: 
-           echo "      KDE (SCV):"
-           $PYTHON $DIR/runExperiment.py                                 \
-              --dbname=$PGDATABASE --port=$PGPORT                       \
-              --queryfile=$query --log=$LOGFILE                         \
-              --model=kde_scv --modelsize=$MODELSIZE                    \
-              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
-              --replay_experiment
+           # echo "      KDE (SCV):"
+           # $PYTHON $DIR/runExperiment.py                                 \
+           #    --dbname=$PGDATABASE --port=$PGPORT                       \
+           #    --queryfile=$query --log=$LOGFILE                         \
+           #    --model=kde_scv --modelsize=$MODELSIZE                    \
+           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
+           #    --replay_experiment
             
            # Run KDE adpative: 
-           echo "      KDE (adaptive):"
-           $PYTHON $DIR/runExperiment.py                                 \
-              --dbname=$PGDATABASE --port=$PGPORT                       \
-              --queryfile=$query --log=$LOGFILE                         \
-              --model=kde_adaptive --modelsize=$MODELSIZE --logbw       \
-              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
-              --replay_experiment
+           # echo "      KDE (adaptive):"
+           # $PYTHON $DIR/runExperiment.py                                 \
+           #    --dbname=$PGDATABASE --port=$PGPORT                       \
+           #    --queryfile=$query --log=$LOGFILE                         \
+           #    --model=kde_adaptive --modelsize=$MODELSIZE --logbw       \
+           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
+           #    --replay_experiment
            
            # Run stholes:  
-           echo "      STHoles:"
-           $PYTHON $DIR/runExperiment.py                                 \
-              --dbname=$PGDATABASE --port=$PGPORT                       \
-              --queryfile=$query --log=$LOGFILE                         \
-              --model=stholes --modelsize=$MODELSIZE                    \
-              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
-              --replay_experiment
+           # echo "      STHoles:"
+           # $PYTHON $DIR/runExperiment.py                                 \
+           #    --dbname=$PGDATABASE --port=$PGPORT                       \
+           #    --queryfile=$query --log=$LOGFILE                         \
+           #    --model=stholes --modelsize=$MODELSIZE                    \
+           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
+           #    --replay_experiment
 
            # Run with Postgres Histograms:
            #echo "      Postgres histograms:"

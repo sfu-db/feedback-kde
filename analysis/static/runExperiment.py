@@ -60,6 +60,7 @@ def prepareWorkload(args):
         f_train = open(trainworkload_filename, "w")
         f_test = open(testworkload_filename, "w")
         f = open(args.queryfile)
+        print('read from queryfile:', args.queryfile)
         for linenr, query in enumerate(f):
             if linenr in selected_training_queries:
                 trainworkload.append(query)
@@ -126,13 +127,14 @@ parser.add_argument("--log", action="store", required=True, help="Where to appen
 args = parser.parse_args()
 
 # First, open the connection to Postgres.
-conn = psycopg2.connect("dbname=%s host=localhost port=%i" % (args.dbname, args.port))
+conn = psycopg2.connect("dbname=%s host=localhost port=%i user=card" % (args.dbname, args.port))
 conn.set_session('read uncommitted', autocommit=True)
 cur = conn.cursor()
 
 # Make sure that debug mode is deactivated and that all model traces are removed (unless we want to reuse the model):
 cur.execute("SET kde_debug TO false;")
-cur.execute("SET ocl_use_gpu TO true;")
+#  cur.execute("SET ocl_use_gpu TO true;")
+cur.execute("SET ocl_use_gpu TO false;")
 cur.execute("SET kde_error_metric TO Quadratic;")
 cur.execute("DELETE FROM pg_kdefeedback;")
 
@@ -198,7 +200,7 @@ if training_workload:
 
 # Build batch models based on the collected feedback.
 if (args.model == "kde_batch"):
-    cur.execute("SET kde_collect_feedback TO false;") # We don't need further feedback collection.    
+    cur.execute("SET kde_collect_feedback TO false;") # We don't need further feedback collection.
     cur.execute("SET kde_enable_bandwidth_optimization TO true;")
     cur.execute("SET kde_optimization_feedback_window TO %i;" % len(training_workload))
 # KDE Adaptive and STHOles have already built their model, now we trigger building for all other models.

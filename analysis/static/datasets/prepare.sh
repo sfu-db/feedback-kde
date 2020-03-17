@@ -3,7 +3,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/../../conf.sh
 
-DATASETS=(bike forest genhist_set1 genhist_set2 power protein tpch)
+# DATASETS=(bike forest genhist_set1 genhist_set2 power protein tpch)
+DATASETS=(forest)
 QUERIES=2500
 
 for dataset in "${DATASETS[@]}" ; do
@@ -17,7 +18,7 @@ for dataset in "${DATASETS[@]}" ; do
   # Now build the queries.
   for table in "${TABLES[@]}"; do
     # Extract the table so the python script can impor them into sqlite.
-    echo "COPY $table TO '$DIR/$dataset/data/$table.csv' DELIMITER '|';" | $PSQL $PGDATABASE
+    echo "COPY $table TO '$DIR/$dataset/data/$table.csv' DELIMITER '|';" | $PSQL $PGDATABASE -p$PGPORT -U$PGUSER
     # Generate the dv query set (data centered, target volume).
     echo "Generating DV workload for table $table ... "
     $PYTHON $DIR/query_generator.py                          \

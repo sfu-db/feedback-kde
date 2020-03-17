@@ -42,4 +42,4 @@ echo "       c3 AS c2," >> /tmp/load.sql
 echo "       c6 AS c3 INTO forest3 FROM forest10;" >> /tmp/load.sql
 
 # Now call the load script.
-$PSQL -p$PGPORT $PGDATABASE -f /tmp/load.sql 
+$PSQL -p$PGPORT -U$PGUSER $PGDATABASE -f /tmp/load.sql 
