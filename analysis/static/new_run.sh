@@ -5,22 +5,23 @@ source $DIR/../conf.sh
 cd $DIR
 
 # Some general parameters.
-REPETITIONS=1
 # TRAINFILE="tiny_train.sql"
 # TESTFILE="tiny_test.sql"
 # GTFILE="tiny_gt.csv"
 TRAINFILE="query_train.sql"
 TESTFILE="query_test.sql"
 GTFILE="test_gt.csv"
-echo $TRAINQUERIES
-echo $TESTQUERIES
 
-# for forest dataset
+# for forest dataset (1%)
 MODELSIZE=5810
 LOGFILE=$DIR/result.csv
 PGDATABSE=forest_num
 
 echo >> $LOGFILE
+
+$POSTGRES -D $PGDATAFOLDER -p $PGPORT >>  postgres.log 2>&1 &
+PGPID=$!
+sleep 2
 
 # echo "      None:"
 # $PYTHON $DIR/new_run.py                                 \
@@ -29,10 +30,6 @@ echo >> $LOGFILE
 #     --model=none --modelsize=$MODELSIZE                    \
 #     --trainfile=$TRAINFILE --testfile=$TESTFILE   \
     #    --replay_experiment
-
-$POSTGRES -D $PGDATAFOLDER -p $PGPORT >>  postgres.log 2>&1 &
-PGPID=$!
-sleep 2
 
 # Run stholes:
 echo "      STHoles:"
@@ -43,8 +40,25 @@ $PYTHON $DIR/new_run.py                                 \
     --trainfile=$TRAINFILE --testfile=$TESTFILE   \
     #    --replay_experiment
 
-kill -9 $PGPID
-sleep 2
+ 
+# # Run KDE heuristic:
+# echo "      KDE (heuristic):"
+# $PYTHON $DIR/new_run.py                                 \
+#    --dbname=$PGDATABASE --port=$PGPORT                       \
+#    --log=$DIR/kde_heuristic_result.csv  --gtfile=$GTFILE                        \
+#    --model=kde_heuristic --modelsize=$MODELSIZE              \
+#    --trainfile=$TRAINFILE --testfile=$TESTFILE   \
+#  # --replay_experiment
+
+# Run KDE batch:
+#  echo "      KDE (batch):"
+#  $PYTHON $DIR/new_run.py                                 \
+#     --dbname=$PGDATABASE --port=$PGPORT                       \
+#     --log=$DIR/kde_batch_result.csv  --gtfile=$GTFILE                        \
+#     --model=kde_batch --modelsize=$MODELSIZE                  \
+#     --trainfile=$TRAINFILE --testfile=$TESTFILE   \
+#  # --replay_experiment
+
 
 # for dataset in "${DATASETS[@]}"; do
 #     echo "Running experiments for $dataset:"

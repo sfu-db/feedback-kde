@@ -13,7 +13,7 @@ def error_metric(est_card, card):
         return (card + 1) / (est_card + 1)
 
 def load_test_gt(gt_file):
-    df = pd.read_csv(gt_file)
+    df = pd.read_csv(gt_file, header=None)
     print('load test ground truth from {}'.format(gt_file))
     return df.values.reshape(-1)
 
@@ -54,17 +54,18 @@ def analyzeTable(args, table):
     else:
       query += "%s" % table.columns[i].pg_name
   query += ");"
+  print(query)
   cur.execute(query)
   # For KDE, we want to restore the sample to avoid
   if "kde" in args.model:
     sample_file = "/tmp/sample_%s.csv" % args.dbname
     if args.replay_experiment:
       # Import the sample and make sure the bandwidth is re-optimized.
-      cur.execute("SELECT kde_import_sample('%s', '%s');" % (table, sample_file))
-      cur.execute("SELECT kde_reset_bandwidth('%s');" % table)
+      cur.execute("SELECT kde_import_sample('%s', '%s');" % (table.pg_name, sample_file))
+      cur.execute("SELECT kde_reset_bandwidth('%s');" % table.pg_name)
     else:
       # Export the sample.
-      cur.execute("SELECT kde_dump_sample('%s', '%s');" % (table, sample_file))
+      cur.execute("SELECT kde_dump_sample('%s', '%s');" % (table.pg_name, sample_file))
   print("done (took %.2f ms)!" % (1000*(time.time() - ts)))
 
 # Define and parse the command line arguments:
@@ -164,6 +165,7 @@ if (args.model != "stholes" and args.model != "kde_adaptive"):
 
 # Ok, we are all set. Run the experiments!
 f = open(args.log, "w")
+print('write result into {}'.format(args.log))
 sys.stdout.write("\tRunning test queries ... ")
 sys.stdout.flush()
 ts = time.time()
