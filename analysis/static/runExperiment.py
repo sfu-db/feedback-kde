@@ -133,8 +133,7 @@ cur = conn.cursor()
 
 # Make sure that debug mode is deactivated and that all model traces are removed (unless we want to reuse the model):
 cur.execute("SET kde_debug TO false;")
-#  cur.execute("SET ocl_use_gpu TO true;")
-cur.execute("SET ocl_use_gpu TO false;")
+cur.execute("SET ocl_use_gpu TO true;")
 cur.execute("SET kde_error_metric TO Quadratic;")
 cur.execute("DELETE FROM pg_kdefeedback;")
 
