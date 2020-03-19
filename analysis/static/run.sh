@@ -39,12 +39,12 @@ for dataset in "${DATASETS[@]}"; do
            #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES
 
            # Run KDE heuristic: 
-           echo "      KDE (heuristic):"
-           $PYTHON $DIR/runExperiment.py                                 \
-              --dbname=$PGDATABASE --port=$PGPORT                       \
-              --queryfile=$query --log=$LOGFILE                         \
-              --model=kde_heuristic --modelsize=$MODELSIZE              \
-              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
+           # echo "      KDE (heuristic):"
+           # $PYTHON $DIR/runExperiment.py                                 \
+           #    --dbname=$PGDATABASE --port=$PGPORT                       \
+           #    --queryfile=$query --log=$LOGFILE                         \
+           #    --model=kde_heuristic --modelsize=$MODELSIZE              \
+           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
               # --replay_experiment
             
            # Run KDE optimal: 
@@ -66,12 +66,12 @@ for dataset in "${DATASETS[@]}"; do
            #    --replay_experiment
            
            # Run stholes:  
-           # echo "      STHoles:"
-           # $PYTHON $DIR/runExperiment.py                                 \
-           #    --dbname=$PGDATABASE --port=$PGPORT                       \
-           #    --queryfile=$query --log=$LOGFILE                         \
-           #    --model=stholes --modelsize=$MODELSIZE                    \
-           #    --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
+           echo "      STHoles:"
+           $PYTHON $DIR/runExperiment.py                                 \
+              --dbname=$PGDATABASE --port=$PGPORT                       \
+              --queryfile=$query --log=$LOGFILE                         \
+              --model=stholes --modelsize=$MODELSIZE                    \
+              --trainqueries=$TRAINQUERIES --testqueries=$TESTQUERIES   \
            #    --replay_experiment
 
            # Run with Postgres Histograms:
