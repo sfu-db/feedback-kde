@@ -1,0 +1,11 @@
+      KDE (batch):
+done!
+load train from query_train.sql(1000), load test from query_test.sql(5097)
+load test ground truth from test_gt.csv
+Loading csv... done, took 0.5s
+Parsing... done, took 0.1s
+	Running training queries ... done (took 297038.92 ms)!
+	Building estimator ... ANALYZE forest_num(Elevation, Aspect, Slope, Horizontal_Distance_To_Hydrology, Vertical_Distance_To_Hydrology, Horizontal_Distance_To_Roadways, Hillshade_9am, Hillshade_Noon, Hillshade_3pm, Horizontal_Distance_To_Fire_Points);
+done (took 91736.83 ms)!
+write result into /mnt/momodisk/prog/feedback-kde/analysis/static/kde_batch_result.csv
+	Running test queries ... done (took 1926.74 ms)!
