@@ -833,8 +833,9 @@ void ocl_constructEstimator(
   unsigned int i;
   cl_int err = CL_SUCCESS;
   CREATE_TIMER(); 
-  if (dimensionality > 10) {
-    fprintf(stderr, "We only support models for up to 10 dimensions!\n");
+
+  if (dimensionality > 15) {
+      fprintf(stderr, "We only support models for up to 15 dimensions!\n");
     return;
   }
   // Make sure we have a context.
